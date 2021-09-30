@@ -1,5 +1,8 @@
+html,
 body {
   text-align: center;
+  height: 100%;
+  overflow: hidden;
 }
 
 button {
@@ -9,27 +12,21 @@ button {
   border-radius: 30%;
 }
 
-.header {
-  text-align: center;
-  margin-top: 20px;
-  font-size: 70px;
-  font-family: 'Fugaz One';
-  color: red;
-  font-weight: bolder;
-  font-family: 'Lobster';
-  text-shadow: #ddf505 0px 0px, #ddf505 1px 1px, #f80505 2px 2px,
-    #f80505 3px 3px, #f80505 4px 4px, #f80505 5px 5px;
+.logo {
+  width: 900px;
+  height: 150px;
 }
 
 .game {
   display: flex;
   flex-direction: column;
+  align-items: center;
   position: relative;
-  border-radius: 10px;
-  width: 80%;
-  height: 700px;
+  border-radius: 20px;
+  width: 90%;
+  height: 70%;
   margin: auto;
-  margin-top: 20px;
+  margin-top: 3%;
   background: rgb(84, 114, 232);
   background: linear-gradient(
     0deg,
@@ -39,16 +36,18 @@ button {
 }
 
 .game__header {
+  width: 100%;
   display: flex;
-  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
   margin-top: 30px;
+  font-size: 40px;
 }
 
 .game__button {
   width: 70px;
   height: 70px;
-  margin: auto;
-  margin-top: 20px;
+  margin-left: 50px;
   font-size: 44px;
   background-color: yellow;
   color: red;
@@ -59,46 +58,98 @@ button {
   transform: scale(1.1);
 }
 
-.fa-play-circle {
-  color: red;
+.fa-cheese {
+  animation: blink-effect 1s step-end infinite;
+}
+
+@keyframes blink-effect {
+  50% {
+    opacity: 0;
+  }
+}
+
+.game__Level {
+  visibility: hidden;
+  margin-left: 50px;
+  color: rgb(255, 255, 255);
+  font-weight: 500;
+  border-radius: 30%;
+  line-height: 75px;
 }
 
 .game__timer {
+  visibility: hidden;
   width: 150px;
-  margin: auto;
-  margin-top: 20px;
-  border-radius: 10px;
-  font-size: 40px;
   color: white;
 }
 
 .game__score {
-  width: 60px;
-  height: 60px;
-  margin: auto;
-  margin-top: 10px;
+  visibility: hidden;
+  width: 70px;
+  height: 70px;
+  margin-right: 50px;
   color: white;
   background-color: red;
-  font-size: 40px;
+  font-weight: 500;
   border-radius: 30%;
-  line-height: 65px;
+  line-height: 75px;
 }
 
 .game__field {
-  position: relative;
+  display: flex;
   width: 100%;
   height: 100%;
-  margin-top: 10px;
+  margin-top: 40px;
+  margin-bottom: 30px;
+  position: relative;
+}
+
+.jerry_field {
+  position: relative;
+  width: 80%;
+  height: auto;
+  cursor: pointer;
+}
+
+.tom_field {
+  width: 20%;
+  height: auto;
+  border-left: solid 4px white;
+}
+
+.tom {
+  animation: watch 3s linear infinite both;
+}
+
+@keyframes watch {
+  0% {
+    transform: translate(0);
+  }
+  20% {
+    transform: translate(-5px, 50px);
+  }
+  40% {
+    transform: translate(-20px, -100px);
+  }
+  60% {
+    transform: translate(-10px, 5px) scale(1.1);
+  }
+  80% {
+    transform: translate(-50px, -30px);
+  }
+  100% {
+    transform: translate(0);
+  }
 }
 
 .pop-up {
   border-radius: 20px;
-  width: 480px;
+  width: 500px;
   height: 250px;
   margin: auto;
   background-color: #f1ededde;
   color: white;
-  transform: translateY(-160%);
+  transform: translateY(-180%);
 }
 
 .pop-up__header {
@@ -122,7 +173,27 @@ button {
   transition: transfrom 300ms ease-in;
 }
 
+.pop-up__next {
+  display: none;
+  width: 60px;
+  height: 60px;
+  margin: auto;
+  margin-top: 50px;
+  font-size: 24px;
+  color: white;
+  background-color: black;
+  transition: transfrom 300ms ease-in;
+}
+
+.pop-up__message {
+  padding: 10px;
+}
+
 .pop-up__refresh:hover {
+  transform: scale(1.1);
+}
+
+.pop-up__next:hover {
   transform: scale(1.1);
 }
 
@@ -131,4 +202,12 @@ button {
   font-size: 40px;
   color: black;
   font-weight: bolder;
+}
+
+.jerry {
+  padding: 30px;
+}
+
+.jerry:hover {
+  transform: scale(1.2);
 }

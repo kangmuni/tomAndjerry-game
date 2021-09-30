@@ -15,23 +15,36 @@
     />
   </head>
   <body>
-    <header class="header">TOM and JERRY</header>
+    <header>
+      <img class="logo" src="img/logo.png" alt="logo" />
+    </header>
     <section class="game">
       <header class="game__header">
         <button class="game__button">
           <i class="fas fa-cheese"></i>
         </button>
-        <span class="game__timer">00:00</span>
-        <span class="game__score">0</span>
+        <span class="game__Level"></span>
+        <span class="game__timer"></span>
+        <span class="game__score"></span>
       </header>
-      <section class="game__field"></section>
+      <section class="game__field">
+        <span class="jerry_field"></span>
+        <span class="tom_field">
+          <div>
+            <img class="tom" src="img/tom.png" alt="tom" />
+          </div>
+        </span>
+      </section>
     </section>
     <section class="pop-up pop-up--hide">
       <header class="pop-up__header">
         <button class="pop-up__refresh">
           <i class="fas fa-redo-alt"></i>
         </button>
-        <span class="pop-up__message">You have WON!</span>
+        <button class="pop-up__next">
+          <i class="fas fa-arrow-right"></i>
+        </button>
+        <span class="pop-up__message"></span>
       </header>
     </section>
   </body>
