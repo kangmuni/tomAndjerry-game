@@ -1,8 +1,10 @@
 'use strict';
 
-const STEP1_JERRY_COUNT = 10;
-const STEP2_JERRY_COUNT = 15;
-const STEP3_JERRY_COUNT = 20;
+import PopUp from './popup.js';
+
+const STEP1_JERRY_COUNT = 1;
+const STEP2_JERRY_COUNT = 2;
+const STEP3_JERRY_COUNT = 3;
 const TOM_COUNT = 1;
 const JERRY_SIZE = 120;
 const GAME_DURATION_SEC = 15;
@@ -13,11 +15,7 @@ const gameBtn = document.querySelector('.game__button');
 const gameLevel = document.querySelector('.game__Level');
 const gameTimer = document.querySelector('.game__timer');
 const gameScore = document.querySelector('.game__score');
-
-const popUp = document.querySelector('.pop-up');
-const popUpText = document.querySelector('.pop-up__message');
-const popUpRefresh = document.querySelector('.pop-up__refresh');
-const popUpNext = document.querySelector('.pop-up__next');
+const jerry = document.getElementsByClassName('jerry');
 
 const jerrySound = new Audio('./sound/jerry_pull.mp3');
 const alertSound = new Audio('./sound/alert.wav');
@@ -43,16 +41,16 @@ gameBtn.addEventListener('click', () => {
 
 field.addEventListener('click', onFieldClick);
 
-popUpRefresh.addEventListener('click', () => {
+const gameFinishBanner = new PopUp();
+
+gameFinishBanner.setReplayClickListener(() => {
   level = 1;
   startGame();
-  hidePopUp();
 });
 
-popUpNext.addEventListener('click', () => {
+gameFinishBanner.setNextClickListener(() => {
   level++;
   startGame();
-  hidePopUp();
 });
 
 function startGame() {
@@ -69,7 +67,7 @@ function stopGame() {
   started = false;
   hideGameLevel();
   stopGameTimer();
-  showPopUpWithText();
+  gameFinishBanner.showWithText();
   playSound(alertSound);
   stopSound(bgSound);
 }
@@ -135,28 +133,23 @@ function updateTimerText(time) {
 
 function finishGame(win) {
   started = false;
-  hideGameButton();
   if (win && level === 3) {
     playSound(successSound);
-    popUpNext.style.display = 'none';
-    popUpRefresh.style.display = 'inline';
-    showPopUpWithText('🎉 YOU GOT ALL 🧀!!!');
+    gameFinishBanner.buttonChange(level);
+    gameFinishBanner.showWithText('🎉 YOU GOT ALL 🧀!!!');
   } else if (win && level === 2) {
     playSound(winSound);
-    popUpNext.style.display = 'inline';
-    popUpRefresh.style.display = 'none';
-    showPopUpWithText('BUT, I WANT MORE 🧀...');
+    gameFinishBanner.buttonChange(level);
+    gameFinishBanner.showWithText('BUT, I WANT MORE 🧀...');
   } else if (win && level === 1) {
     playSound(winSound);
-    popUpNext.style.display = 'inline';
-    popUpRefresh.style.display = 'none';
-    showPopUpWithText('BUT, I WANT MORE 🧀...');
+    gameFinishBanner.buttonChange(level);
+    gameFinishBanner.showWithText('BUT, I WANT MORE 🧀...');
   } else {
     playSound(bugSound1);
     setTimeout(playSound(bugSound2), 1000);
-    popUpNext.style.display = 'none';
-    popUpRefresh.style.display = 'inline';
-    showPopUpWithText('WHERE IS MY 🧀?');
+    gameFinishBanner.buttonChange();
+    gameFinishBanner.showWithText('WHERE IS MY 🧀?');
   }
   stopGameTimer();
   stopSound(bgSound);
@@ -213,15 +206,6 @@ function updateScoreBoard() {
   }
 }
 
-function showPopUpWithText(text) {
-  popUpText.innerHTML = text;
-  popUp.classList.remove('pop-up--hide');
-}
-
-function hidePopUp() {
-  popUp.classList.add('pop-up--hide');
-}
-
 function showGameButton() {
   gameBtn.style.visibility = 'visible';
 }
@@ -241,7 +225,7 @@ function moveAuto() {
         clearInterval(st);
       }
     }
-  }, 1500);
+  }, 1000);
 }
 
 function addItem(className, count, imgPath) {
