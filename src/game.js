@@ -3,7 +3,35 @@
 import Field from './field.js';
 import * as sound from './sound.js';
 
-export default class Game {
+export default class GameBuilder {
+  withJerryCount1(num) {
+    this.jerryCount1 = num;
+    return this;
+  }
+  withJerryCount2(num) {
+    this.jerryCount2 = num;
+    return this;
+  }
+  withJerryCount3(num) {
+    this.jerryCount3 = num;
+    return this;
+  }
+  withGameDuration(duration) {
+    this.gameDuration = duration;
+    return this;
+  }
+  build() {
+    console.log(this);
+    return new Game(
+      this.jerryCount1,
+      this.jerryCount2,
+      this.jerryCount3,
+      this.gameDuration
+    );
+  }
+}
+
+class Game {
   constructor(jerryCount1, jerryCount2, jerryCount3, gameDuration) {
     this.jerryCount1 = jerryCount1;
     this.jerryCount2 = jerryCount2;
