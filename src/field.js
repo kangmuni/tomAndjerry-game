@@ -15,7 +15,6 @@ export default class Field {
   }
 
   init(level) {
-    console.log(level);
     this.field.innerHTML = '';
     if (level === 3) {
       this._addItem('jerry', this.jerryCount3, 'img/jerry.png');
@@ -50,9 +49,9 @@ export default class Field {
     let st = setInterval(() => {
       for (let i = 0; i < jerry.length; i++) {
         x = jerry[i].getBoundingClientRect();
-        jerry[i].style.left = `${x.left + 0.3}px`;
+        jerry[i].style.left = `${x.left + 0.1}px`;
         if (x.right >= this.fieldRect.width) {
-          this.finishGame && this.finishGame(false);
+          this.finish && this.finish(false);
           clearInterval(st);
         }
       }
@@ -63,8 +62,8 @@ export default class Field {
     this.onItemClick = onItemClick;
   }
 
-  setFinishGame(finishGame) {
-    this.finishGame = finishGame;
+  setFinish(finish) {
+    this.finish = finish;
   }
 
   onClick = (event) => {
@@ -72,7 +71,7 @@ export default class Field {
     if (target.matches('.jerry')) {
       target.remove();
       playSound(jerrySound);
-      this.onItemClick && this.onItemClick('jerry');
+      this.onItemClick && this.onItemClick('jerry', event);
     }
   };
 }
