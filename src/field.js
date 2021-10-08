@@ -51,7 +51,7 @@ export default class Field {
         x = jerry[i].getBoundingClientRect();
         jerry[i].style.left = `${x.left + 0.1}px`;
         if (x.right >= this.fieldRect.width) {
-          this.finish && this.finish(false);
+          this.stop && this.stop('lose');
           clearInterval(st);
         }
       }
@@ -62,8 +62,8 @@ export default class Field {
     this.onItemClick = onItemClick;
   }
 
-  setFinish(finish) {
-    this.finish = finish;
+  setStop(stop) {
+    this.stop = stop;
   }
 
   onClick = (event) => {
@@ -71,7 +71,7 @@ export default class Field {
     if (target.matches('.jerry')) {
       target.remove();
       playSound(jerrySound);
-      this.onItemClick && this.onItemClick('jerry', event);
+      this.onItemClick && this.onItemClick();
     }
   };
 }

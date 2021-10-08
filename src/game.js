@@ -3,7 +3,13 @@
 import Field from './field.js';
 import * as sound from './sound.js';
 
-export default class GameBuilder {
+export const Reason = Object.freeze({
+  win: 'win',
+  lose: 'lose',
+  next: 'next',
+});
+
+export class GameBuilder {
   withJerryCount1(num) {
     this.jerryCount1 = num;
     return this;
@@ -21,7 +27,6 @@ export default class GameBuilder {
     return this;
   }
   build() {
-    console.log(this);
     return new Game(
       this.jerryCount1,
       this.jerryCount2,
@@ -44,7 +49,7 @@ class Game {
     this.gameBtn = document.querySelector('.game__button');
     this.gameBtn.addEventListener('click', () => {
       if (this.started) {
-        this.stop();
+        this.stop(Reason.lose);
       } else {
         this.start();
       }
@@ -61,29 +66,29 @@ class Game {
       this.jerryCount3
     );
     this.gameField.setClickListener(this.onItemClick);
-    this.gameField.setFinish(this.finish);
+    this.gameField.setStop(this.stop);
   }
 
-  onItemClick = (item) => {
+  onItemClick = () => {
     if (!this.started) {
       return;
-    } else if (item === 'jerry') {
+    } else {
       this.score++;
       this.updateScoreBoard();
       if (this.level === 3) {
         if (this.score === this.jerryCount3) {
-          this.finish(true);
+          this.stop(Reason.win);
         }
         return;
       }
       if (this.level === 2) {
         if (this.score === this.jerryCount2) {
-          this.finish(true);
+          this.stop(Reason.next);
         }
         return;
       }
       if (this.score === this.jerryCount1) {
-        this.finish(true);
+        this.stop(Reason.next);
         return;
       }
     }
@@ -107,42 +112,24 @@ class Game {
     sound.playBg();
   }
 
-  stop() {
+  stop = (reason) => {
     this.started = false;
-    this.hideGameLevel();
     this.stopGameTimer();
-    sound.playAlert();
     sound.stopBg();
-    this.onGameStop && this.onGameStop('lose');
-  }
-
-  finish = (win) => {
-    this.started = false;
-    if (win && this.level === 3) {
-      sound.playSuccess();
-      this.onGameStop && this.onGameStop('win', this.level);
-    } else if (win && this.level === 2) {
-      sound.playWin();
-      this.onGameStop && this.onGameStop('next level', this.level);
-    } else if (win && this.level === 1) {
-      sound.playWin();
-      this.onGameStop && this.onGameStop('next level', this.level);
+    if (this.level === 3) {
+      this.onGameStop && this.onGameStop(reason, this.level);
+    } else if (this.level === 2) {
+      this.onGameStop && this.onGameStop(reason, this.level);
+    } else if (this.level === 1) {
+      this.onGameStop && this.onGameStop(reason, this.level);
     } else {
-      sound.playBug1();
-      setTimeout(sound.playBug2(), 1000);
-      this.onGameStop && this.onGameStop('lose');
+      this.onGameStop && this.onGameStop(reason);
     }
-    this.stopGameTimer();
-    sound.stopBg();
   };
 
   showGameLevel() {
     this.gameLevel.innerText = `Lv.${this.level}`;
     this.gameLevel.style.visibility = 'visible';
-  }
-
-  hideGameLevel() {
-    this.gameLevel.style.visibility = 'hidden';
   }
 
   showTimerAndScore() {
@@ -157,11 +144,11 @@ class Game {
       if (remainingTimeSec <= 0) {
         clearInterval(this.timer);
         if (this.level === 3) {
-          this.finish(this.score === this.jerryCount3);
+          this.stop(this.score === this.jerryCount3 ? Reason.win : Reason.lose);
         } else if (this.level === 2) {
-          this.finish(this.score === this.jerryCount2);
+          this.stop(this.score === this.jerryCount2 ? Reason.win : Reason.lose);
         } else {
-          this.finish(this.score === this.jerryCount1);
+          this.stop(this.score === this.jerryCount1 ? Reason.win : Reason.lose);
         }
         return;
       }

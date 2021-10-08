@@ -1,7 +1,8 @@
 'use strict';
 
 import PopUp from './popup.js';
-import GameBuilder from './game.js';
+import { GameBuilder, Reason } from './game.js';
+import * as sound from './sound.js';
 
 const gameFinishBanner = new PopUp();
 const game = new GameBuilder()
@@ -12,17 +13,20 @@ const game = new GameBuilder()
   .build();
 
 game.setGameStopListener((reason, level) => {
-  console.log(reason, level);
   let message;
   switch (reason) {
-    case 'lose':
+    case Reason.lose:
       message = 'WHERE IS MY 🧀?';
+      sound.playBug1();
+      setTimeout(sound.playBug2(), 1000);
       break;
-    case 'next level':
+    case Reason.next:
       message = 'BUT, I WANT MORE 🧀...';
+      sound.playWin();
       break;
-    case 'win':
+    case Reason.win:
       message = '🎉 YOU GOT ALL 🧀!!!';
+      sound.playSuccess();
       break;
     default:
       throw new Error('NOT VALID REASON');
