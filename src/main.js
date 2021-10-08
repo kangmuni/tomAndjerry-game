@@ -1,21 +1,17 @@
 'use strict';
 
 import PopUp from './popup.js';
+import Field from './field.js';
 
-const STEP1_JERRY_COUNT = 1;
-const STEP2_JERRY_COUNT = 2;
-const STEP3_JERRY_COUNT = 3;
-const TOM_COUNT = 1;
-const JERRY_SIZE = 120;
+const STEP1_JERRY_COUNT = 15;
+const STEP2_JERRY_COUNT = 20;
+const STEP3_JERRY_COUNT = 25;
 const GAME_DURATION_SEC = 15;
 
-const field = document.querySelector('.jerry_field');
-const fieldRect = field.getBoundingClientRect();
 const gameBtn = document.querySelector('.game__button');
 const gameLevel = document.querySelector('.game__Level');
 const gameTimer = document.querySelector('.game__timer');
 const gameScore = document.querySelector('.game__score');
-const jerry = document.getElementsByClassName('jerry');
 
 const jerrySound = new Audio('./sound/jerry_pull.mp3');
 const alertSound = new Audio('./sound/alert.wav');
@@ -39,8 +35,6 @@ gameBtn.addEventListener('click', () => {
   }
 });
 
-field.addEventListener('click', onFieldClick);
-
 const gameFinishBanner = new PopUp();
 
 gameFinishBanner.setReplayClickListener(() => {
@@ -53,9 +47,43 @@ gameFinishBanner.setNextClickListener(() => {
   startGame();
 });
 
+const gameField = new Field(
+  STEP1_JERRY_COUNT,
+  STEP2_JERRY_COUNT,
+  STEP3_JERRY_COUNT
+);
+
+gameField.setClickListener(onItemClick);
+gameField.setFinishGame(finishGame);
+
+function onItemClick(item) {
+  if (!started) {
+    return;
+  } else if (item === 'jerry') {
+    score++;
+    updateScoreBoard();
+    if (level === 3) {
+      if (score === STEP3_JERRY_COUNT) {
+        finishGame(true);
+      }
+      return;
+    }
+    if (level === 2) {
+      if (score === STEP2_JERRY_COUNT) {
+        finishGame(true);
+      }
+      return;
+    }
+    if (score === STEP1_JERRY_COUNT) {
+      finishGame(true);
+      return;
+    }
+  }
+}
+
 function startGame() {
   started = true;
-  initGame();
+  initGame(level);
   hideGameButton();
   showGameLevel();
   showTimerAndScore();
@@ -70,22 +98,6 @@ function stopGame() {
   gameFinishBanner.showWithText();
   playSound(alertSound);
   stopSound(bgSound);
-}
-
-function initGame() {
-  score = 0;
-  field.innerHTML = '';
-  if (level === 3) {
-    gameScore.innerText = STEP3_JERRY_COUNT;
-    addItem('jerry', STEP3_JERRY_COUNT, 'img/jerry.png');
-  } else if (level === 2) {
-    gameScore.innerText = STEP2_JERRY_COUNT;
-    addItem('jerry', STEP2_JERRY_COUNT, 'img/jerry.png');
-  } else {
-    gameScore.innerText = STEP1_JERRY_COUNT;
-    addItem('jerry', STEP1_JERRY_COUNT, 'img/jerry.png');
-  }
-  moveAuto();
 }
 
 function showGameLevel() {
@@ -131,6 +143,18 @@ function updateTimerText(time) {
   gameTimer.innerHTML = `${minutes}:${seconds}`;
 }
 
+function initGame(level) {
+  score = 0;
+  if (level === 3) {
+    gameScore.innerText = STEP3_JERRY_COUNT;
+  } else if (level === 2) {
+    gameScore.innerText = STEP2_JERRY_COUNT;
+  } else {
+    gameScore.innerText = STEP1_JERRY_COUNT;
+  }
+  gameField.init(level);
+}
+
 function finishGame(win) {
   started = false;
   if (win && level === 3) {
@@ -153,38 +177,6 @@ function finishGame(win) {
   }
   stopGameTimer();
   stopSound(bgSound);
-}
-
-function onFieldClick(event) {
-  if (!started) {
-    return;
-  }
-  const target = event.target;
-  if (target.matches('.jerry')) {
-    target.remove();
-    score++;
-    playSound(jerrySound);
-    updateScoreBoard();
-    if (level === 3) {
-      if (score === STEP3_JERRY_COUNT) {
-        finishGame(true);
-      }
-      return;
-    }
-    if (level === 2) {
-      if (score === STEP2_JERRY_COUNT) {
-        finishGame(true);
-      }
-      return;
-    }
-    if (score === STEP1_JERRY_COUNT) {
-      finishGame(true);
-      return;
-    }
-  } else if (target.matches('.nibbles')) {
-    finishGame(false);
-    return;
-  }
 }
 
 function playSound(sound) {
@@ -212,40 +204,4 @@ function showGameButton() {
 
 function hideGameButton() {
   gameBtn.style.display = 'none';
-}
-
-function moveAuto() {
-  const jerry = document.querySelectorAll('.jerry');
-  let st = setInterval(() => {
-    for (let i = 0; i < jerry.length; i++) {
-      x = jerry[i].getBoundingClientRect();
-      jerry[i].style.left = `${x.left + 0.1}px`;
-      if (x.right >= fieldRect.width) {
-        finishGame();
-        clearInterval(st);
-      }
-    }
-  }, 1000);
-}
-
-function addItem(className, count, imgPath) {
-  const x1 = 20;
-  const y1 = 0;
-  const x2 = fieldRect.width / 1.5 - JERRY_SIZE;
-  const y2 = fieldRect.height - JERRY_SIZE;
-  for (let i = 0; i < count; i++) {
-    const item = document.createElement('img');
-    item.setAttribute('class', className);
-    item.setAttribute('src', imgPath);
-    item.style.position = 'absolute';
-    const jerryX = randomNumber(x1, x2);
-    const jerryY = randomNumber(y1, y2);
-    item.style.left = `${jerryX}px`;
-    item.style.top = `${jerryY}px`;
-    field.appendChild(item);
-  }
-}
-
-function randomNumber(min, max) {
-  return Math.random() * (max - min) + min;
 }
