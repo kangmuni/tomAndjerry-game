@@ -50,7 +50,7 @@ export default class Field {
       for (let i = 0; i < jerry.length; i++) {
         x = jerry[i].getBoundingClientRect();
         jerry[i].style.left = `${x.left + 0.1}px`;
-        if (x.right >= this.fieldRect.width) {
+        if (x.right > this.fieldRect.width) {
           this.stop && this.stop('lose');
           clearInterval(st);
         }

@@ -31,6 +31,7 @@ game.setGameStopListener((reason, level) => {
     default:
       throw new Error('NOT VALID REASON');
   }
+  console.log(level);
   gameFinishBanner.showWithText(message);
   gameFinishBanner.buttonChange(level);
 });

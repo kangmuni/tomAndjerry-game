@@ -116,14 +116,16 @@ class Game {
     this.started = false;
     this.stopGameTimer();
     sound.stopBg();
-    if (this.level === 3) {
-      this.onGameStop && this.onGameStop(reason, this.level);
-    } else if (this.level === 2) {
-      this.onGameStop && this.onGameStop(reason, this.level);
-    } else if (this.level === 1) {
-      this.onGameStop && this.onGameStop(reason, this.level);
-    } else {
+    if (reason === 'lose') {
       this.onGameStop && this.onGameStop(reason);
+    } else {
+      if (this.level === 3) {
+        this.onGameStop && this.onGameStop(reason, this.level);
+      } else if (this.level === 2) {
+        this.onGameStop && this.onGameStop(reason, this.level);
+      } else if (this.level === 1) {
+        this.onGameStop && this.onGameStop(reason, this.level);
+      }
     }
   };
 
