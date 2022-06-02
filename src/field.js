@@ -27,7 +27,7 @@ export default class Field {
   }
 
   _addItem(className, count, imgPath) {
-    const x1 = 20;
+    const x1 = 10;
     const y1 = 0;
     const x2 = this.fieldRect.width / 1.5 - JERRY_SIZE;
     const y2 = this.fieldRect.height - JERRY_SIZE;

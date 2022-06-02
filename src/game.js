@@ -47,7 +47,7 @@ class Game {
     this.gameTimer = document.querySelector('.game__timer');
     this.gameScore = document.querySelector('.game__score');
     this.gameBtn = document.querySelector('.game__button');
-    this.clickField = document.querySelector('.game__field');
+    this.field = document.querySelector('.game__field');
     this.gameBtn.addEventListener('click', () => {
       if (this.started) {
         this.stop(Reason.lose);
@@ -106,6 +106,7 @@ class Game {
     this.showGameLevel();
     this.showTimerAndScore();
     this.startGameTimer();
+    this.activateField();
     sound.playBg();
   }
 
@@ -124,11 +125,15 @@ class Game {
         this.onGameStop && this.onGameStop(reason, this.level);
       }
     }
-    this.deactivateClick();
+    this.deactivateField();
   };
 
-  deactivateClick() {
-    this.clickField.style.pointerEvents = 'none';
+  deactivateField() {
+    this.field.style.pointerEvents = 'none';
+  }
+
+  activateField() {
+    this.field.style.pointerEvents = 'auto';
   }
 
   showGameLevel() {
