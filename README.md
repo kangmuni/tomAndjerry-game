@@ -28,6 +28,10 @@
 - [ ] 제리의 자연스럽지 못한 움직임 
 <br />
 
-|시작 전|시작 후|
-|--|--|
-|![image](https://user-images.githubusercontent.com/68316994/173488203-10022293-e8e7-42a0-afa3-5ea6ff0c8821.png)|![image](https://user-images.githubusercontent.com/68316994/173489559-7dfd0f3d-d73b-4d8b-9887-47fc45d93aa9.png)|
+|시작 전|
+|--|
+|![image](https://user-images.githubusercontent.com/68316994/173488203-10022293-e8e7-42a0-afa3-5ea6ff0c8821.png)|
+
+|시작 후|
+|--|
+|![image](https://user-images.githubusercontent.com/68316994/173489559-7dfd0f3d-d73b-4d8b-9887-47fc45d93aa9.png)|
